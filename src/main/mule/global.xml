@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule
+	xmlns:mico-order-process-api="http://www.mulesoft.org/schema/mule/mico-order-process-api"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+	http://www.mulesoft.org/schema/mule/mule-apikit
+	http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+	http://www.mulesoft.org/schema/mule/http 
+	http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+	http://www.mulesoft.org/schema/mule/core
+	http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+	http://www.mulesoft.org/schema/mule/mico-order-process-api 
+	http://www.mulesoft.org/schema/mule/mico-order-process-api/current/mule-mico-order-process-api.xsd">
+	
+	<http:listener-config name="mico-order-eapi-httpListenerConfig">
+		<http:listener-connection
+			host="${http.host}"
+			port="${http.port}" />
+	</http:listener-config>
+
+	<apikit:config
+		name="mico-order-eapi-config"
+		api="${api.spec}"
+		outboundHeadersMapName="outboundHeaders"
+		httpStatusVarName="httpStatus" />
+
+	<mico-order-process-api:config
+		name="Mico_Order_Process_API_Config"
+		doc:name="Mico Order Process API Config"
+		doc:id="2e5e35bb-ec64-4211-82f6-cfac4f2b1640"
+		property_host="localhost"
+		property_port="3030"
+		property_protocol="HTTP"
+		property_client-id="teste"
+		property_client-secret="teste" />
+	<global-property doc:name="Global Property" doc:id="ad01f6b3-60cd-421d-be8c-d9e60c3e2eda" name="env" value="dev" />
+	<configuration-properties doc:name="Configuration properties" doc:id="469a08b8-85c4-490d-8f31-467ecc3347c7" file="properties-${env}.yaml" />
+	<configuration-properties doc:name="Configuration properties" doc:id="fa8bd256-906e-4093-89ca-f2e0103074bb" file="properties.yaml" />
+
+	
+</mule>

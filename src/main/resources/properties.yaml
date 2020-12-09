@@ -1,0 +1,7 @@
+api:
+  name: "${api.name}"
+  groupId: "${api.groupId}"
+  artifactId: "${api.artifactId}"
+  version: "${api.version}"
+  spec: "resource::${api.groupId}:${api.artifactId}:${api.version}:raml:zip:${api.name}.raml"
+  majorVersion: "v1"

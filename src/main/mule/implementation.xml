@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:mico-order-process-api="http://www.mulesoft.org/schema/mule/mico-order-process-api"
+ 	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" 
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/mico-order-process-api http://www.mulesoft.org/schema/mule/mico-order-process-api/current/mule-mico-order-process-api.xsd">
+	
+
+	
+	<flow name="postOrders" doc:id="700e7339-3038-40db-b31b-86424c85fb0a" >
+		<mico-order-process-api:post-order doc:name="Post order" doc:id="c787ad5c-4bd1-404c-8b0c-abd1b7413631" config-ref="Mico_Order_Process_API_Config"/>
+	</flow>
+	<flow name="getOrders" doc:id="e3a3e7cd-8ad1-48f3-9542-b6a02fb94a78" >
+		<mico-order-process-api:get-orders doc:name="get orders" doc:id="24d256c9-d2b7-4042-8264-83a7d637395e" config-ref="Mico_Order_Process_API_Config" initial-id="#[message.attributes.queryParams.'initialId']" final-id="#[message.attributes.queryParams.'finalId']"/>
+	</flow>
+	<flow name="getCustomer" doc:id="e723547a-7b4c-4444-859d-c1483496d737" >
+		<mico-order-process-api:get-customers doc:name="Get customers" doc:id="03bc112b-8574-4306-b82c-508ab32c08ce" config-ref="Mico_Order_Process_API_Config"/>
+	</flow>
+</mule>

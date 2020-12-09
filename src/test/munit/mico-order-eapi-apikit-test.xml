@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd http://www.mulesoft.org/schema/mule/munit-tools http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd ">
+    <munit:config name="mico-order-eapi-apikit-test.xml" />
+    <http:request-config name="HTTP_Request_Configuration" basePath="/api">
+        <http:request-connection host="localhost" port="8081" />
+    </http:request-config>
+    <munit:test name="post:\orders:application\json:mico-order-eapi-config-201-application\json-FlowTest" description="Verifying functionality of [post:\orders:application\json:mico-order-eapi-config-201-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="mico-order-eapi-main" />
+            <munit:enable-flow-source value="post:\orders:application\json:mico-order-eapi-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+            <set-payload value="#[MunitTools::getResourceAsString('scaffolder/request/post_orders_application_json.json')]" />
+			<munit-tools:mock-when doc:name="Mock when" doc:id="3b1c7a49-7787-4c58-93f7-8fbc843f69ad" processor="mico-order-process-api:post-order">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Post order" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="c787ad5c-4bd1-404c-8b0c-abd1b7413631" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="Mico_Order_Process_API_Config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[
+{
+  customerId: 1,
+  orderId: 1
+}
+]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+        </munit:behavior>
+        <munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="POST" path="/orders">
+                <http:headers>#[{"Accept":"application/json","Content-Type":"application/json"}]</http:headers>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(201)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 201" />
+            <munit-tools:assert-that expression="#[output application/java -- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/post_201_orders_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="post:\orders:application\json:mico-order-eapi-config-400-application\json-FlowTest" description="Verifying functionality of [post:\orders:application\json:mico-order-eapi-config-400-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="mico-order-eapi-main" />
+            <munit:enable-flow-source value="post:\orders:application\json:mico-order-eapi-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+            <set-payload value="#[{batata: 2}]"/>
+        </munit:behavior>
+        <munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="POST" path="/orders">
+                <http:headers>#[{"Accept":"application/json","Content-Type":"application/json"}]</http:headers>
+                <http:response-validator>
+                    <http:success-status-code-validator values="400" />
+                </http:response-validator>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(400)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 400" />
+            <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/post_400_orders_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="post:\orders:application\json:mico-order-eapi-config-500-application\json-FlowTest" description="Verifying functionality of [post:\orders:application\json:mico-order-eapi-config-500-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="mico-order-eapi-main" />
+            <munit:enable-flow-source value="post:\orders:application\json:mico-order-eapi-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior>
+            <set-payload value="MunitTools::getResourceAsString('scaffolder/request/post_orders_application_json.json')" />
+        </munit:behavior>
+        <munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="POST" path="/orders">
+                <http:headers>#[{"Accept":"application/json","Content-Type":"application/json"}]</http:headers>
+                <http:response-validator>
+                    <http:success-status-code-validator values="500" />
+                </http:response-validator>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(500)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 500" />
+            <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/post_500_orders_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="get:\alive:mico-order-eapi-config-200-application\json-FlowTest" description="Verifying functionality of [get:\alive:mico-order-eapi-config-200-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="mico-order-eapi-main" />
+            <munit:enable-flow-source value="get:\alive:mico-order-eapi-config" />
+        </munit:enable-flow-sources>
+        <munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="GET" path="/alive">
+                <http:headers>#[{"Accept":"application/json"}]</http:headers>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(200)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 200" />
+            <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_200_alive_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="get:\orders:mico-order-eapi-config-200-application\json-FlowTest" description="Verifying functionality of [get:\orders:mico-order-eapi-config-200-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="mico-order-eapi-main" />
+            <munit:enable-flow-source value="get:\orders:mico-order-eapi-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="9807a703-3bd7-4b87-9d5d-cbdf4e7bddec" processor="mico-order-process-api:get-orders">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="get orders" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="24d256c9-d2b7-4042-8264-83a7d637395e" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="Mico_Order_Process_API_Config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[
+{
+  orderData: {
+    poNumber: 123473,
+    signatureRequiredFlag: false,
+    shipInstructions: "Dont break it",
+    giftWrapFlag: true,
+    giftWrapMessage: "You rock!",
+    currencyCode: "USD",
+    subTotal: 41.5
+  },
+  items: [
+    {
+      id: 12345,
+      category: "T-Shirt",
+      quantity: 4,
+      size: "M"
+    },
+    {
+      id: 34567,
+      category: "Hoodie",
+      quantity: 2,
+      size: "M"
+    }
+  ]
+}
+]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="GET" path="/orders">
+                <http:headers>#[{"Accept":"application/json"}]</http:headers>
+                <http:query-params>#[{"finalId":"","initialId":""}]</http:query-params>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(200)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 200" />
+            <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_200_orders_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="get:\orders:mico-order-eapi-config-404-application\json-FlowTest" description="Verifying functionality of [get:\orders:mico-order-eapi-config-404-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="mico-order-eapi-main" />
+            <munit:enable-flow-source value="get:\orders:mico-order-eapi-config" />
+        </munit:enable-flow-sources>
+        <munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="GET" path="/orders">
+                <http:headers><![CDATA[#[{"Accept":"application/json"}]]]></http:headers>
+                <http:query-params><![CDATA[#[{"finalId":"0","initialId":"0"}]]]></http:query-params>
+                <http:response-validator>
+                    <http:success-status-code-validator values="404" />
+                </http:response-validator>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(404)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 404" />
+            <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_404_orders_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="get:\orders:mico-order-eapi-config-400-application\json-FlowTest" description="Verifying functionality of [get:\orders:mico-order-eapi-config-400-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="mico-order-eapi-main" />
+            <munit:enable-flow-source value="get:\orders:mico-order-eapi-config" />
+        </munit:enable-flow-sources>
+        <munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="GET" path="/orders">
+                <http:headers><![CDATA[#[{"Accept":"application/json"}]]]></http:headers>
+                <http:response-validator>
+                    <http:success-status-code-validator values="400" />
+                </http:response-validator>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(400)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 400" />
+            <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_400_orders_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="get:\orders:mico-order-eapi-config-500-application\json-FlowTest" description="Verifying functionality of [get:\orders:mico-order-eapi-config-500-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="mico-order-eapi-main" />
+            <munit:enable-flow-source value="get:\orders:mico-order-eapi-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="bc86738f-82eb-4677-a3b6-104b01c4a168" processor="mico-order-process-api:get-orders">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="get orders" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="24d256c9-d2b7-4042-8264-83a7d637395e" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="Mico_Order_Process_API_Config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="HTTP:INTERNAL_SERVER_ERROR" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="GET" path="/orders">
+                <http:headers>#[{"Accept":"application/json"}]</http:headers>
+                <http:query-params>#[{"finalId":"","initialId":""}]</http:query-params>
+                <http:response-validator>
+                    <http:success-status-code-validator values="500" />
+                </http:response-validator>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(500)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 500" />
+            <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_500_orders_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="get:\ready:mico-order-eapi-config-200-application\json-FlowTest" description="Verifying functionality of [get:\ready:mico-order-eapi-config-200-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="mico-order-eapi-main" />
+            <munit:enable-flow-source value="get:\ready:mico-order-eapi-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="6d4c75e3-2509-40bc-807f-fb79462eabd1" processor="mico-order-process-api:alive-health-endpoint_2">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Alive Health Endpoint" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="77845ee3-7c12-4626-b62f-7fdd3b10b1a8" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="Mico_Order_Process_API_Config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[
+{
+	status: "READY"
+}
+
+]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="GET" path="/ready">
+                <http:headers>#[{"Accept":"application/json"}]</http:headers>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(200)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 200" />
+            <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_200_ready_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="get:\customer:mico-order-eapi-config-200-application\json-FlowTest" description="Verifying functionality of [get:\customer:mico-order-eapi-config-200-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="mico-order-eapi-main" />
+            <munit:enable-flow-source value="get:\customer:mico-order-eapi-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="eac969d2-850d-4fdf-8c8a-59991f457fd6" processor="mico-order-process-api:get-customers">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Get customers" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="03bc112b-8574-4306-b82c-508ab32c08ce" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="Mico_Order_Process_API_Config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[
+[{
+    "customerId": 1,
+    "firstName": "John",
+    "lastName": "Doe",
+    "phoneNumber": "123-123-1234",
+    "email": "john.doe@gmail.com",
+    "address": "1234 Main Street, San Jose, 12345, US"
+}]
+]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="GET" path="/customer">
+                <http:headers>#[{"Accept":"application/json"}]</http:headers>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(200)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 200" />
+            <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_200_customer_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="get:\customer:mico-order-eapi-config-404-application\json-FlowTest" description="Verifying functionality of [get:\customer:mico-order-eapi-config-404-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="mico-order-eapi-main" />
+            <munit:enable-flow-source value="get:\customer:mico-order-eapi-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="2453675b-09ea-46fc-9fa9-98277d5d6b27" processor="mico-order-process-api:get-customers">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Get customers" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="03bc112b-8574-4306-b82c-508ab32c08ce" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="Mico_Order_Process_API_Config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[
+
+[]
+
+]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="CONNECT" path="/customer">
+                <http:headers><![CDATA[#[{"Accept":"application/json"}]]]></http:headers>
+                <http:response-validator>
+                    <http:success-status-code-validator values="404" />
+                </http:response-validator>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(404)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 404" />
+            <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_404_customer_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="get:\customer:mico-order-eapi-config-400-application\json-FlowTest" description="Verifying functionality of [get:\customer:mico-order-eapi-config-400-application\json]" ignore="true">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="mico-order-eapi-main" />
+            <munit:enable-flow-source value="get:\customer:mico-order-eapi-config" />
+        </munit:enable-flow-sources>
+        <munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="GET" path="/customer">
+                <http:headers>#[{"Accept":"application/json"}]</http:headers>
+                <http:response-validator>
+                    <http:success-status-code-validator values="400" />
+                </http:response-validator>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(400)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 400" />
+            <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_400_customer_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="get:\customer:mico-order-eapi-config-500-application\json-FlowTest" description="Verifying functionality of [get:\customer:mico-order-eapi-config-500-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="mico-order-eapi-main" />
+            <munit:enable-flow-source value="get:\customer:mico-order-eapi-config" />
+        </munit:enable-flow-sources>
+        <munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="5d97abb5-d52c-48b7-b5ac-dab9320bbdcd" processor="mico-order-process-api:get-customers">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Get customers" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="03bc112b-8574-4306-b82c-508ab32c08ce" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="Mico_Order_Process_API_Config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="HTTP:INTERNAL_SERVER_ERROR" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+            <http:request config-ref="HTTP_Request_Configuration" method="GET" path="/customer">
+                <http:headers>#[{"Accept":"application/json"}]</http:headers>
+                <http:response-validator>
+                    <http:success-status-code-validator values="500" />
+                </http:response-validator>
+            </http:request>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(500)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 500" />
+            <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_500_customer_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
+        </munit:validation>
+    </munit:test>
+</mule>

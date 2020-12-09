@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:mico-order-process-api="http://www.mulesoft.org/schema/mule/mico-order-process-api" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/mico-order-process-api http://www.mulesoft.org/schema/mule/mico-order-process-api/current/mule-mico-order-process-api.xsd">
+	<flow name="getAlive" doc:id="bcdf1002-5a23-4675-952a-b6d9f1440b5f" >
+		<ee:transform doc:name="Transform Message" doc:id="c37d40d7-e7ae-4163-85d9-babf22a330b6">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	status: "ALIVE"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="getReady" doc:id="5cc4a4ab-a2f7-403f-8feb-56702f9880bb" >
+		<mico-order-process-api:alive-health-endpoint_2 doc:name="Alive Health Endpoint" doc:id="77845ee3-7c12-4626-b62f-7fdd3b10b1a8" config-ref="Mico_Order_Process_API_Config"/>
+	</flow>
+</mule>
