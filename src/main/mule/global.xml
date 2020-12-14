@@ -35,10 +35,10 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		doc:name="Mico Order Process API Config"
 		doc:id="2e5e35bb-ec64-4211-82f6-cfac4f2b1640"
 		property_host="localhost"
-		property_port="3030"
+		property_port="8081"
 		property_protocol="HTTP"
 		property_client-id="teste"
-		property_client-secret="teste" />
+		property_client-secret="teste" property_basePath="/api/v1/"/>
 	<global-property doc:name="Global Property" doc:id="ad01f6b3-60cd-421d-be8c-d9e60c3e2eda" name="env" value="dev" />
 	<configuration-properties doc:name="Configuration properties" doc:id="469a08b8-85c4-490d-8f31-467ecc3347c7" file="properties-${env}.yaml" />
 	<configuration-properties doc:name="Configuration properties" doc:id="fa8bd256-906e-4093-89ca-f2e0103074bb" file="properties.yaml" />
