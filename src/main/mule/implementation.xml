@@ -28,7 +28,7 @@ http://www.mulesoft.org/schema/mule/mico-order-process-api http://www.mulesoft.o
 		</mico-order-process-api:get-orders>
 	</flow>
 	<flow name="getCustomer" doc:id="e723547a-7b4c-4444-859d-c1483496d737" >
-		<mico-order-process-api:get-customers doc:name="Get customers" doc:id="03bc112b-8574-4306-b82c-508ab32c08ce" config-ref="Mico_Order_Process_API_Config">
+		<mico-order-process-api:get-customers doc:name="Get customers" doc:id="03bc112b-8574-4306-b82c-508ab32c08ce" config-ref="Mico_Order_Process_API_Config" initial-id="#[message.attributes.queryParams.'initialId']" final-id="#[message.attributes.queryParams.'finalId']">
 			<error-mapping sourceType="MICO-ORDER-PROCESS-API:BAD_REQUEST" targetType="APP:BAD_REQUEST" />
 			<error-mapping sourceType="MICO-ORDER-PROCESS-API:INTERNAL_SERVER_ERROR" targetType="APP:INTERNAL_SERVER_ERROR" />
 			<error-mapping sourceType="MICO-ORDER-PROCESS-API:NOT_FOUND" targetType="APP:CUSTOMER_NOT_FOUND" />

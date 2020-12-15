@@ -121,7 +121,7 @@ output application/json
 }]]></ee:set-payload>
 					</ee:message>
 					<ee:variables >
-						<ee:set-variable variableName="httpStatus" ><![CDATA[501]]></ee:set-variable>
+						<ee:set-variable variableName="httpStatus" ><![CDATA[404]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
 			</on-error-propagate>
@@ -136,6 +136,9 @@ output application/json
 	"description": error.description
 }]]></ee:set-payload>
 					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="httpStatus" ><![CDATA[500]]></ee:set-variable>
+					</ee:variables>
 				</ee:transform>
 			</on-error-propagate>
 			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="a66921ce-6060-4f08-abff-3539418994f0" type="APP:CUSTOMER_NOT_FOUND">
@@ -150,7 +153,7 @@ output application/json
 }]]></ee:set-payload>
 					</ee:message>
 					<ee:variables>
-						<ee:set-variable variableName="httpStatus"><![CDATA[501]]></ee:set-variable>
+						<ee:set-variable variableName="httpStatus"><![CDATA[404]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
 			</on-error-propagate>
@@ -189,7 +192,7 @@ output application/json
     <flow name="get:\alive:mico-order-eapi-config">
 		<flow-ref doc:name="Flow Reference" doc:id="a8050c72-5ed0-4b5e-af8c-94ff3e928249" name="getAlive" />
     </flow>
-    <flow name="get:\customer:mico-order-eapi-config">
+    <flow name="get:\customers:mico-order-eapi-config">
 		<flow-ref doc:name="Flow Reference" doc:id="2211d6d2-65ee-4924-9ee6-5b73ffbdb87c" name="getCustomer" />
     </flow>
     <flow name="get:\orders:mico-order-eapi-config">

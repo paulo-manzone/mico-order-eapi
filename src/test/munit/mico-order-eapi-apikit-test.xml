@@ -257,10 +257,10 @@
             <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_200_ready_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="get:\customer:mico-order-eapi-config-200-application\json-FlowTest" description="Verifying functionality of [get:\customer:mico-order-eapi-config-200-application\json]">
+    <munit:test name="get:\customers:mico-order-eapi-config-200-application\json-FlowTest" description="Verifying functionality of [get:\customer:mico-order-eapi-config-200-application\json]">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="mico-order-eapi-main" />
-            <munit:enable-flow-source value="get:\customer:mico-order-eapi-config" />
+            <munit:enable-flow-source value="get:\customers:mico-order-eapi-config" />
         </munit:enable-flow-sources>
         <munit:behavior >
 			<munit-tools:mock-when doc:name="Mock when" doc:id="eac969d2-850d-4fdf-8c8a-59991f457fd6" processor="mico-order-process-api:get-customers">
@@ -284,8 +284,8 @@
 			</munit-tools:mock-when>
 		</munit:behavior>
 		<munit:execution>
-            <http:request config-ref="HTTP_Request_Configuration" method="GET" path="/customer">
-                <http:headers>#[{"Accept":"application/json"}]</http:headers>
+            <http:request config-ref="HTTP_Request_Configuration" method="GET" path="/customers">
+                <http:headers><![CDATA[#[{"Accept":"application/json"}]]]></http:headers>
             </http:request>
         </munit:execution>
         <munit:validation>
@@ -293,10 +293,10 @@
             <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_200_customer_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="get:\customer:mico-order-eapi-config-404-application\json-FlowTest" description="Verifying functionality of [get:\customer:mico-order-eapi-config-404-application\json]">
+    <munit:test name="get:\customers:mico-order-eapi-config-404-application\json-FlowTest" description="Verifying functionality of [get:\customer:mico-order-eapi-config-404-application\json]">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="mico-order-eapi-main" />
-            <munit:enable-flow-source value="get:\customer:mico-order-eapi-config" />
+            <munit:enable-flow-source value="get:\customers:mico-order-eapi-config" />
         </munit:enable-flow-sources>
         <munit:behavior >
 			<munit-tools:mock-when doc:name="Mock when" doc:id="2453675b-09ea-46fc-9fa9-98277d5d6b27" processor="mico-order-process-api:get-customers">
@@ -315,7 +315,7 @@
 			</munit-tools:mock-when>
 		</munit:behavior>
 		<munit:execution>
-            <http:request config-ref="HTTP_Request_Configuration" method="CONNECT" path="/customer">
+            <http:request config-ref="HTTP_Request_Configuration" method="CONNECT" path="/customers">
                 <http:headers><![CDATA[#[{"Accept":"application/json"}]]]></http:headers>
                 <http:response-validator>
                     <http:success-status-code-validator values="404" />
@@ -327,14 +327,14 @@
             <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_404_customer_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="get:\customer:mico-order-eapi-config-400-application\json-FlowTest" description="Verifying functionality of [get:\customer:mico-order-eapi-config-400-application\json]" ignore="true">
+    <munit:test name="get:\customers:mico-order-eapi-config-400-application\json-FlowTest" description="Verifying functionality of [get:\customer:mico-order-eapi-config-400-application\json]" ignore="true">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="mico-order-eapi-main" />
-            <munit:enable-flow-source value="get:\customer:mico-order-eapi-config" />
+            <munit:enable-flow-source value="get:\customers:mico-order-eapi-config" />
         </munit:enable-flow-sources>
         <munit:execution>
-            <http:request config-ref="HTTP_Request_Configuration" method="GET" path="/customer">
-                <http:headers>#[{"Accept":"application/json"}]</http:headers>
+            <http:request config-ref="HTTP_Request_Configuration" method="GET" path="/customers">
+                <http:headers><![CDATA[#[{"Accept":"application/json"}]]]></http:headers>
                 <http:response-validator>
                     <http:success-status-code-validator values="400" />
                 </http:response-validator>
@@ -345,10 +345,10 @@
             <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_400_customer_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="get:\customer:mico-order-eapi-config-500-application\json-FlowTest" description="Verifying functionality of [get:\customer:mico-order-eapi-config-500-application\json]">
+    <munit:test name="get:\customers:mico-order-eapi-config-500-application\json-FlowTest" description="Verifying functionality of [get:\customer:mico-order-eapi-config-500-application\json]">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="mico-order-eapi-main" />
-            <munit:enable-flow-source value="get:\customer:mico-order-eapi-config" />
+            <munit:enable-flow-source value="get:\customers:mico-order-eapi-config" />
         </munit:enable-flow-sources>
         <munit:behavior >
 			<munit-tools:mock-when doc:name="Mock when" doc:id="5d97abb5-d52c-48b7-b5ac-dab9320bbdcd" processor="mico-order-process-api:get-customers">
@@ -363,8 +363,8 @@
 			</munit-tools:mock-when>
 		</munit:behavior>
 		<munit:execution>
-            <http:request config-ref="HTTP_Request_Configuration" method="GET" path="/customer">
-                <http:headers>#[{"Accept":"application/json"}]</http:headers>
+            <http:request config-ref="HTTP_Request_Configuration" method="GET" path="/customers">
+                <http:headers><![CDATA[#[{"Accept":"application/json"}]]]></http:headers>
                 <http:response-validator>
                     <http:success-status-code-validator values="500" />
                 </http:response-validator>

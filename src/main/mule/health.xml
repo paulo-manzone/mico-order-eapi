@@ -18,9 +18,9 @@ output application/json
 		</ee:transform>
 	</flow>
 	<flow name="getReady" doc:id="5cc4a4ab-a2f7-403f-8feb-56702f9880bb" >
-		<mico-order-process-api:alive-health-endpoint_2 doc:name="Alive Health Endpoint" doc:id="77845ee3-7c12-4626-b62f-7fdd3b10b1a8" config-ref="Mico_Order_Process_API_Config">
+		<mico-order-process-api:ready-health-endpoint doc:name="READY Health Endpoint" doc:id="99d79edd-6874-4e9a-978b-25ca5e78407d" config-ref="Mico_Order_Process_API_Config">
 			<error-mapping targetType="APP:READY" />
-		</mico-order-process-api:alive-health-endpoint_2>
+		</mico-order-process-api:ready-health-endpoint>
 		<ee:transform doc:name="Copy_of_Transform Message" doc:id="6815e2db-b04f-4072-af30-aa1b2b95b81e" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
