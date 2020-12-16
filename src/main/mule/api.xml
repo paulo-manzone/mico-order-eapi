@@ -13,7 +13,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
         </http:listener>
         <apikit:router config-ref="mico-order-eapi-config" />
         <error-handler>
-            <on-error-propagate type="APIKIT:BAD_REQUEST, APP:BAD_REQUEST" enableNotifications="true" logException="true">
+            <on-error-propagate type="APIKIT:BAD_REQUEST" enableNotifications="true" logException="true">
                 <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
@@ -109,54 +109,6 @@ output application/json
                     </ee:variables>
                 </ee:transform>
             </on-error-propagate>
-			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="1f3cafde-ca20-4283-811b-5d137a9674ce" type="APP:ORDER_NOT_FOUND">
-				<ee:transform doc:name="Transform Message" doc:id="78ab5de1-154e-4586-82c4-88f4043fff00" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
-output application/json
----
-{
-	errorMessage: "Orders not found!",
-	description: error.description
-}]]></ee:set-payload>
-					</ee:message>
-					<ee:variables >
-						<ee:set-variable variableName="httpStatus" ><![CDATA[404]]></ee:set-variable>
-					</ee:variables>
-				</ee:transform>
-			</on-error-propagate>
-			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="41267a69-5153-4539-9964-21db0699c6f7" type="APP:INTERNAL_SERVER_ERROR">
-				<ee:transform doc:name="Transform Message" doc:id="f6052b27-439b-464c-b4c6-ee1d72f94b75" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
-output application/json
----
-{
-	"errorMessage": "Server side error!",
-	"description": error.description
-}]]></ee:set-payload>
-					</ee:message>
-					<ee:variables >
-						<ee:set-variable variableName="httpStatus" ><![CDATA[500]]></ee:set-variable>
-					</ee:variables>
-				</ee:transform>
-			</on-error-propagate>
-			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="a66921ce-6060-4f08-abff-3539418994f0" type="APP:CUSTOMER_NOT_FOUND">
-				<ee:transform doc:name="Transform Message" doc:id="c9492077-ddb7-4492-96c3-6d3bf74d7741" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-	errorMessage: "Customers not found!",
-	description: error.description
-}]]></ee:set-payload>
-					</ee:message>
-					<ee:variables>
-						<ee:set-variable variableName="httpStatus"><![CDATA[404]]></ee:set-variable>
-					</ee:variables>
-				</ee:transform>
-			</on-error-propagate>
         </error-handler>
     </flow>
     <flow name="mico-order-eapi-console">

@@ -1,37 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:mico-order-process-api="http://www.mulesoft.org/schema/mule/mico-order-process-api"
- 	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+<mule
+	xmlns:mico-order-process-api="http://www.mulesoft.org/schema/mule/mico-order-process-api"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
 	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-	xmlns="http://www.mulesoft.org/schema/mule/core" 
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/mico-order-process-api http://www.mulesoft.org/schema/mule/mico-order-process-api/current/mule-mico-order-process-api.xsd">
-	
 
-	
-	<flow name="postOrders" doc:id="700e7339-3038-40db-b31b-86424c85fb0a" >
-		<mico-order-process-api:post-order doc:name="Post order" doc:id="c787ad5c-4bd1-404c-8b0c-abd1b7413631" config-ref="Mico_Order_Process_API_Config">
-			<error-mapping sourceType="MICO-ORDER-PROCESS-API:BAD_REQUEST" targetType="APP:BAD_REQUEST" />
-			<error-mapping sourceType="MICO-ORDER-PROCESS-API:INTERNAL_SERVER_ERROR" targetType="APP:INTERNAL_SERVER_ERROR" />
-			<error-mapping sourceType="MICO-ORDER-PROCESS-API:NOT_FOUND" targetType="APP:NOT_FOUND" />
+
+
+	<flow
+		name="postOrders"
+		doc:id="700e7339-3038-40db-b31b-86424c85fb0a">
+		<mico-order-process-api:post-order
+			doc:name="Post order"
+			doc:id="c787ad5c-4bd1-404c-8b0c-abd1b7413631"
+			config-ref="Mico_Order_Process_API_Config">
 		</mico-order-process-api:post-order>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="cec3f419-6453-4b3b-a6b6-9542852e2c17" type="ANY" >
+				<ee:transform doc:name="Transform Message" doc:id="674b2b0d-f055-463c-8276-feff5746cad8" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+error.errorMessage.payload]]></ee:set-payload>
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="httpStatus" ><![CDATA[error.errorMessage.attributes.statusCode as Number]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+			</on-error-propagate>
+		</error-handler>
 	</flow>
-	<flow name="getOrders" doc:id="e3a3e7cd-8ad1-48f3-9542-b6a02fb94a78" >
-		<mico-order-process-api:get-orders doc:name="get orders" doc:id="24d256c9-d2b7-4042-8264-83a7d637395e" config-ref="Mico_Order_Process_API_Config" initial-id="#[message.attributes.queryParams.'initialId']" final-id="#[message.attributes.queryParams.'finalId']">
-			<error-mapping sourceType="MICO-ORDER-PROCESS-API:BAD_REQUEST" targetType="APP:BAD_REQUEST" />
-			<error-mapping sourceType="MICO-ORDER-PROCESS-API:INTERNAL_SERVER_ERROR" targetType="APP:INTERNAL_SERVER_ERROR" />
-			<error-mapping sourceType="MICO-ORDER-PROCESS-API:NOT_FOUND" targetType="APP:ORDER_NOT_FOUND" />
+	<flow
+		name="getOrders"
+		doc:id="e3a3e7cd-8ad1-48f3-9542-b6a02fb94a78">
+		<mico-order-process-api:get-orders
+			doc:name="get orders"
+			doc:id="24d256c9-d2b7-4042-8264-83a7d637395e"
+			config-ref="Mico_Order_Process_API_Config"
+			initial-id="#[message.attributes.queryParams.'initialId']"
+			final-id="#[message.attributes.queryParams.'finalId']">
 		</mico-order-process-api:get-orders>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="893ade8b-afcb-4c22-a63b-67ce87f8b5c1" type="ANY" >
+				<ee:transform doc:name="Transform Message" doc:id="a25b7f07-1906-4d58-9f7d-dae80ec23cf9" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+error.errorMessage.payload]]></ee:set-payload>
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="httpStatus" ><![CDATA[error.errorMessage.attributes.statusCode as Number]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+			</on-error-propagate>
+		</error-handler>
 	</flow>
-	<flow name="getCustomer" doc:id="e723547a-7b4c-4444-859d-c1483496d737" >
-		<mico-order-process-api:get-customers doc:name="Get customers" doc:id="03bc112b-8574-4306-b82c-508ab32c08ce" config-ref="Mico_Order_Process_API_Config" initial-id="#[message.attributes.queryParams.'initialId']" final-id="#[message.attributes.queryParams.'finalId']">
-			<error-mapping sourceType="MICO-ORDER-PROCESS-API:BAD_REQUEST" targetType="APP:BAD_REQUEST" />
-			<error-mapping sourceType="MICO-ORDER-PROCESS-API:INTERNAL_SERVER_ERROR" targetType="APP:INTERNAL_SERVER_ERROR" />
-			<error-mapping sourceType="MICO-ORDER-PROCESS-API:NOT_FOUND" targetType="APP:CUSTOMER_NOT_FOUND" />
+	<flow
+		name="getCustomer"
+		doc:id="e723547a-7b4c-4444-859d-c1483496d737">
+		<mico-order-process-api:get-customers
+			doc:name="Get customers"
+			doc:id="03bc112b-8574-4306-b82c-508ab32c08ce"
+			config-ref="Mico_Order_Process_API_Config"
+			initial-id="#[message.attributes.queryParams.'initialId']"
+			final-id="#[message.attributes.queryParams.'finalId']">
 		</mico-order-process-api:get-customers>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="d0c8a216-12b7-4316-8043-473c2dbe770f" type="ANY" >
+				<ee:transform doc:name="Transform Message" doc:id="7926b643-3164-4a91-a6db-e801e99fc9ae" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+error.errorMessage.payload]]></ee:set-payload>
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="httpStatus" ><![CDATA[error.errorMessage.attributes.statusCode as Number]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+			</on-error-propagate>
+		</error-handler>
 	</flow>
 </mule>
