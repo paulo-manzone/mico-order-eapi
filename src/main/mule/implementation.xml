@@ -167,5 +167,14 @@ error.errorMessage.payload]]></ee:set-payload>
 			</on-error-propagate>
 			</error-handler>
 		</try>
+		<ee:transform doc:name="Transform Message" doc:id="37ad1f1e-8fd1-40fc-aaf0-37dac94ff09d" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="outboundHeaders" ><![CDATA[{
+	"Location": message.attributes.headers.location as String
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
 	</flow>
 </mule>
