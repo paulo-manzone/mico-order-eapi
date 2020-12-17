@@ -4,7 +4,7 @@
     <http:request-config name="HTTP_Request_Configuration" basePath="/api/v1/">
         <http:request-connection host="localhost" port="8080" />
     </http:request-config>
-    <munit:test name="post:\orders:application\json:mico-order-eapi-config-201-application\json-FlowTest" description="Verifying functionality of [post:\orders:application\json:mico-order-eapi-config-201-application\json]">
+    <munit:test name="post:\orders:application\json:mico-order-eapi-config-201-application\json-FlowTest" description="Verifying functionality of [post:\orders:application\json:mico-order-eapi-config-201-application\json]" ignore="true">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="mico-order-eapi-main" />
             <munit:enable-flow-source value="post:\orders:application\json:mico-order-eapi-config" />
@@ -36,7 +36,7 @@
             <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/post_201_orders_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="post:\orders:application\json:mico-order-eapi-config-400-application\json-FlowTest" description="Verifying functionality of [post:\orders:application\json:mico-order-eapi-config-400-application\json]">
+    <munit:test name="post:\orders:application\json:mico-order-eapi-config-400-application\json-FlowTest" description="Verifying functionality of [post:\orders:application\json:mico-order-eapi-config-400-application\json]" ignore="true">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="mico-order-eapi-main" />
             <munit:enable-flow-source value="post:\orders:application\json:mico-order-eapi-config" />
@@ -67,7 +67,7 @@
             <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/post_400_orders_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="post:\orders:application\json:mico-order-eapi-config-500-application\json-FlowTest" description="Verifying functionality of [post:\orders:application\json:mico-order-eapi-config-500-application\json]">
+    <munit:test name="post:\orders:application\json:mico-order-eapi-config-500-application\json-FlowTest" description="Verifying functionality of [post:\orders:application\json:mico-order-eapi-config-500-application\json]" ignore="true">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="mico-order-eapi-main" />
             <munit:enable-flow-source value="post:\orders:application\json:mico-order-eapi-config" />
@@ -88,7 +88,7 @@
             <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/post_500_orders_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="get:\alive:mico-order-eapi-config-200-application\json-FlowTest" description="Verifying functionality of [get:\alive:mico-order-eapi-config-200-application\json]">
+    <munit:test name="get:\alive:mico-order-eapi-config-200-application\json-FlowTest" description="Verifying functionality of [get:\alive:mico-order-eapi-config-200-application\json]" ignore="true">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="mico-order-eapi-main" />
             <munit:enable-flow-source value="get:\alive:mico-order-eapi-config" />
@@ -103,7 +103,7 @@
             <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_200_alive_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="get:\orders:mico-order-eapi-config-200-application\json-FlowTest" description="Verifying functionality of [get:\orders:mico-order-eapi-config-200-application\json]">
+    <munit:test name="get:\orders:mico-order-eapi-config-200-application\json-FlowTest" description="Verifying functionality of [get:\orders:mico-order-eapi-config-200-application\json]" ignore="true">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="mico-order-eapi-main" />
             <munit:enable-flow-source value="get:\orders:mico-order-eapi-config" />
@@ -157,7 +157,7 @@
             <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_200_orders_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="get:\orders:mico-order-eapi-config-404-application\json-FlowTest" description="Verifying functionality of [get:\orders:mico-order-eapi-config-404-application\json]">
+    <munit:test name="get:\orders:mico-order-eapi-config-404-application\json-FlowTest" description="Verifying functionality of [get:\orders:mico-order-eapi-config-404-application\json]" ignore="true">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="mico-order-eapi-main" />
             <munit:enable-flow-source value="get:\orders:mico-order-eapi-config" />
@@ -176,7 +176,7 @@
             <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_404_orders_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="get:\orders:mico-order-eapi-config-400-application\json-FlowTest" description="Verifying functionality of [get:\orders:mico-order-eapi-config-400-application\json]">
+    <munit:test name="get:\orders:mico-order-eapi-config-400-application\json-FlowTest" description="Verifying functionality of [get:\orders:mico-order-eapi-config-400-application\json]" ignore="true">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="mico-order-eapi-main" />
             <munit:enable-flow-source value="get:\orders:mico-order-eapi-config" />
@@ -194,7 +194,7 @@
             <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_400_orders_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="get:\orders:mico-order-eapi-config-500-application\json-FlowTest" description="Verifying functionality of [get:\orders:mico-order-eapi-config-500-application\json]">
+    <munit:test name="get:\orders:mico-order-eapi-config-500-application\json-FlowTest" description="Verifying functionality of [get:\orders:mico-order-eapi-config-500-application\json]" ignore="true">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="mico-order-eapi-main" />
             <munit:enable-flow-source value="get:\orders:mico-order-eapi-config" />
@@ -225,7 +225,7 @@
             <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_500_orders_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="get:\ready:mico-order-eapi-config-200-application\json-FlowTest" description="Verifying functionality of [get:\ready:mico-order-eapi-config-200-application\json]">
+    <munit:test name="get:\ready:mico-order-eapi-config-200-application\json-FlowTest" description="Verifying functionality of [get:\ready:mico-order-eapi-config-200-application\json]" ignore="true">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="mico-order-eapi-main" />
             <munit:enable-flow-source value="get:\ready:mico-order-eapi-config" />
@@ -257,7 +257,7 @@
             <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_200_ready_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="get:\customers:mico-order-eapi-config-200-application\json-FlowTest" description="Verifying functionality of [get:\customer:mico-order-eapi-config-200-application\json]">
+    <munit:test name="get:\customers:mico-order-eapi-config-200-application\json-FlowTest" description="Verifying functionality of [get:\customer:mico-order-eapi-config-200-application\json]" ignore="true">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="mico-order-eapi-main" />
             <munit:enable-flow-source value="get:\customers:mico-order-eapi-config" />
@@ -293,7 +293,7 @@
             <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_200_customer_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="get:\customers:mico-order-eapi-config-404-application\json-FlowTest" description="Verifying functionality of [get:\customer:mico-order-eapi-config-404-application\json]">
+    <munit:test name="get:\customers:mico-order-eapi-config-404-application\json-FlowTest" description="Verifying functionality of [get:\customer:mico-order-eapi-config-404-application\json]" ignore="true">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="mico-order-eapi-main" />
             <munit:enable-flow-source value="get:\customers:mico-order-eapi-config" />
@@ -345,7 +345,7 @@
             <munit-tools:assert-that expression="#[output application/java --- payload]" is="#[MunitTools::equalTo(readUrl('classpath://scaffolder/response/get_400_customer_application_json.json','application/json'))]" message="The response payload is not correct!" doc:name="Assert That - Payload is Expected" />
         </munit:validation>
     </munit:test>
-    <munit:test name="get:\customers:mico-order-eapi-config-500-application\json-FlowTest" description="Verifying functionality of [get:\customer:mico-order-eapi-config-500-application\json]">
+    <munit:test name="get:\customers:mico-order-eapi-config-500-application\json-FlowTest" description="Verifying functionality of [get:\customer:mico-order-eapi-config-500-application\json]" ignore="true">
         <munit:enable-flow-sources>
             <munit:enable-flow-source value="mico-order-eapi-main" />
             <munit:enable-flow-source value="get:\customers:mico-order-eapi-config" />

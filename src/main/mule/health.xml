@@ -18,24 +18,15 @@ output application/json
 		</ee:transform>
 	</flow>
 	<flow name="getReady" doc:id="5cc4a4ab-a2f7-403f-8feb-56702f9880bb" >
-		<mico-order-process-api:ready-health-endpoint doc:name="READY Health Endpoint" doc:id="99d79edd-6874-4e9a-978b-25ca5e78407d" config-ref="Mico_Order_Process_API_Config">
+		<try doc:name="Try" doc:id="cdd3b718-94fe-4b40-8740-044d9f306325" >
+			<mico-order-process-api:ready-health-endpoint doc:name="READY Health Endpoint" doc:id="99d79edd-6874-4e9a-978b-25ca5e78407d" config-ref="Mico_Order_Process_API_Config">
 			<error-mapping targetType="APP:READY" />
 		</mico-order-process-api:ready-health-endpoint>
-		<ee:transform doc:name="Copy_of_Transform Message" doc:id="6815e2db-b04f-4072-af30-aa1b2b95b81e" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
-output application/json
----
-{
-	status: "READY"
-}]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
-		<error-handler >
-			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="5e1662eb-0302-44e3-a5a5-debbc552d1c8" type="APP:READY">
-				<ee:transform doc:name="Copy_of_Copy_of_Transform Message" doc:id="47466cfa-bb45-4544-a292-ef468c2b71d5" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
+			<error-handler >
+				<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="5e1662eb-0302-44e3-a5a5-debbc552d1c8" type="ANY">
+				<ee:transform doc:name="Transform Message" doc:id="47466cfa-bb45-4544-a292-ef468c2b71d5">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -43,11 +34,12 @@ output application/json
 	description: error.description
 }]]></ee:set-payload>
 					</ee:message>
-					<ee:variables >
-						<ee:set-variable variableName="httpStatus" ><![CDATA[500]]></ee:set-variable>
+					<ee:variables>
+						<ee:set-variable variableName="httpStatus"><![CDATA[500]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
 			</on-error-propagate>
-		</error-handler>
+			</error-handler>
+		</try>
 	</flow>
 </mule>
