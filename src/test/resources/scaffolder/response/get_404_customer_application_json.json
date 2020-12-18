@@ -1,4 +1,4 @@
 {
-    "errorMessage": "Orders not found!",
-    "description": "Get orders returned empty!"
+    "errorMessage": "Customer not found!",
+    "description": "Get customer returned empty!"
 }
