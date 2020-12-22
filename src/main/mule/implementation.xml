@@ -24,8 +24,8 @@ http://www.mulesoft.org/schema/mule/mico-order-process-api http://www.mulesoft.o
 				doc:name="get orders"
 				doc:id="24d256c9-d2b7-4042-8264-83a7d637395e"
 				config-ref="Mico_Order_Process_API_Config"
-				initial-id="#[message.attributes.queryParams.'initialId']"
-				final-id="#[message.attributes.queryParams.'finalId']">
+				initial-id="#[message.attributes.queryParams.'initialSubtotal']"
+				final-id="#[message.attributes.queryParams.'finalSubtotal']" initial-subtotal="#[attributes.queryParams.'initialSubtotal']" final-subtotal="#[attributes.queryParams.'finalSubtotal']">
 			</mico-order-process-api:get-orders>
 			<error-handler>
 				<on-error-propagate
@@ -83,8 +83,8 @@ error.errorMessage.payload]]></ee:set-payload>
 				doc:name="Get customers"
 				doc:id="03bc112b-8574-4306-b82c-508ab32c08ce"
 				config-ref="Mico_Order_Process_API_Config"
-				initial-id="#[message.attributes.queryParams.'initialId']"
-				final-id="#[message.attributes.queryParams.'finalId']">
+				initial-id="#[message.attributes.queryParams.'F']"
+				final-id="#[message.attributes.queryParams.'finalId']" first-name="#[attributes.queryParams.'firstName']" last-name="#[attributes.queryParams.'lastName']">
 			</mico-order-process-api:get-customers>
 			<error-handler>
 				<on-error-propagate
