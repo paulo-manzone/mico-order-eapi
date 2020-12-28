@@ -24,8 +24,8 @@ http://www.mulesoft.org/schema/mule/mico-order-process-api http://www.mulesoft.o
 				doc:name="get orders"
 				doc:id="24d256c9-d2b7-4042-8264-83a7d637395e"
 				config-ref="Mico_Order_Process_API_Config"
-				initial-id="#[message.attributes.queryParams.'initialSubtotal']"
-				final-id="#[message.attributes.queryParams.'finalSubtotal']" initial-subtotal="#[attributes.queryParams.'initialSubtotal']" final-subtotal="#[attributes.queryParams.'finalSubtotal']">
+				initial-subtotal="#[attributes.queryParams.'initialSubtotal']"
+				final-subtotal="#[attributes.queryParams.'finalSubtotal']">
 			</mico-order-process-api:get-orders>
 			<error-handler>
 				<on-error-propagate
@@ -54,22 +54,35 @@ error.errorMessage.payload]]></ee:set-payload>
 	<flow
 		name="getOrderByIdFlow"
 		doc:id="ca4313b8-98b4-4a1e-bfc4-308ca64b4da5">
-		<try doc:name="Try" doc:id="f87d23f5-1667-4d2c-9ee4-92c1005858db" >
-			<mico-order-process-api:get-order-by-id doc:name="Get order by Id" doc:id="611805b6-9134-4cf4-b17d-d15fdeb51a49" config-ref="Mico_Order_Process_API_Config" salesforce-id="#[message.attributes.uriParams.salesforceId]" />
-			<error-handler >
-				<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="7ce1aeca-ca80-401c-bf34-88a7c4f1d465" type="ANY">
-				<ee:transform doc:name="Transform Message" doc:id="62291858-9ff9-46b8-8990-64d0323e113b">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
+		<try
+			doc:name="Try"
+			doc:id="f87d23f5-1667-4d2c-9ee4-92c1005858db">
+			<mico-order-process-api:get-order-by-id
+				doc:name="Get order by Id"
+				doc:id="611805b6-9134-4cf4-b17d-d15fdeb51a49"
+				config-ref="Mico_Order_Process_API_Config"
+				salesforce-id="#[message.attributes.uriParams.salesforceId]" />
+			<error-handler>
+				<on-error-propagate
+					enableNotifications="true"
+					logException="true"
+					doc:name="On Error Propagate"
+					doc:id="7ce1aeca-ca80-401c-bf34-88a7c4f1d465"
+					type="ANY">
+					<ee:transform
+						doc:name="Transform Message"
+						doc:id="62291858-9ff9-46b8-8990-64d0323e113b">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 error.errorMessage.payload]]></ee:set-payload>
-					</ee:message>
-					<ee:variables>
-						<ee:set-variable variableName="httpStatus"><![CDATA[error.errorMessage.attributes.statusCode as Number]]></ee:set-variable>
-					</ee:variables>
-				</ee:transform>
-			</on-error-propagate>
+						</ee:message>
+						<ee:variables>
+							<ee:set-variable variableName="httpStatus"><![CDATA[error.errorMessage.attributes.statusCode as Number]]></ee:set-variable>
+						</ee:variables>
+					</ee:transform>
+				</on-error-propagate>
 			</error-handler>
 		</try>
 	</flow>
@@ -83,8 +96,8 @@ error.errorMessage.payload]]></ee:set-payload>
 				doc:name="Get customers"
 				doc:id="03bc112b-8574-4306-b82c-508ab32c08ce"
 				config-ref="Mico_Order_Process_API_Config"
-				initial-id="#[message.attributes.queryParams.'F']"
-				final-id="#[message.attributes.queryParams.'finalId']" first-name="#[attributes.queryParams.'firstName']" last-name="#[attributes.queryParams.'lastName']">
+				first-name="#[attributes.queryParams.'firstName']"
+				last-name="#[attributes.queryParams.'lastName']">
 			</mico-order-process-api:get-customers>
 			<error-handler>
 				<on-error-propagate
@@ -148,30 +161,44 @@ error.errorMessage.payload]]></ee:set-payload>
 	<flow
 		name="postOrders"
 		doc:id="700e7339-3038-40db-b31b-86424c85fb0a">
-		<try doc:name="Try" doc:id="6dbb51b5-bcf9-4ee0-b171-1aa49c2d46e0" >
-			<mico-order-process-api:post-order doc:name="Post order" doc:id="c787ad5c-4bd1-404c-8b0c-abd1b7413631" config-ref="Mico_Order_Process_API_Config">
-		</mico-order-process-api:post-order>
-			<error-handler >
-				<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="9716670a-c4a5-4fba-bacb-c64bf3ffe158" type="ANY">
-				<ee:transform doc:name="Transform Message" doc:id="137f8271-acd9-4192-923a-b7f0ed60aa88">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
+		<try
+			doc:name="Try"
+			doc:id="6dbb51b5-bcf9-4ee0-b171-1aa49c2d46e0">
+			<mico-order-process-api:post-order
+				doc:name="Post order"
+				doc:id="c787ad5c-4bd1-404c-8b0c-abd1b7413631"
+				config-ref="Mico_Order_Process_API_Config">
+			</mico-order-process-api:post-order>
+			<error-handler>
+				<on-error-propagate
+					enableNotifications="true"
+					logException="true"
+					doc:name="On Error Propagate"
+					doc:id="9716670a-c4a5-4fba-bacb-c64bf3ffe158"
+					type="ANY">
+					<ee:transform
+						doc:name="Transform Message"
+						doc:id="137f8271-acd9-4192-923a-b7f0ed60aa88">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 error.errorMessage.payload]]></ee:set-payload>
-					</ee:message>
-					<ee:variables>
-						<ee:set-variable variableName="httpStatus"><![CDATA[error.errorMessage.attributes.statusCode as Number]]></ee:set-variable>
-					</ee:variables>
-				</ee:transform>
-			</on-error-propagate>
+						</ee:message>
+						<ee:variables>
+							<ee:set-variable variableName="httpStatus"><![CDATA[error.errorMessage.attributes.statusCode as Number]]></ee:set-variable>
+						</ee:variables>
+					</ee:transform>
+				</on-error-propagate>
 			</error-handler>
 		</try>
-		<ee:transform doc:name="Transform Message" doc:id="37ad1f1e-8fd1-40fc-aaf0-37dac94ff09d" >
-			<ee:message >
+		<ee:transform
+			doc:name="Transform Message"
+			doc:id="37ad1f1e-8fd1-40fc-aaf0-37dac94ff09d">
+			<ee:message>
 			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="outboundHeaders" ><![CDATA[{
+			<ee:variables>
+				<ee:set-variable variableName="outboundHeaders"><![CDATA[{
 	"Location": message.attributes.headers.location as String
 }]]></ee:set-variable>
 			</ee:variables>
