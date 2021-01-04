@@ -33,7 +33,34 @@ error.muleMessage.typedValue.errorDetails default []]]></ee:set-variable>
 				<error-handler-plugin:on-error doc:name="Process Error" doc:id="add3cc22-177c-4b07-b945-59bd8d57f186" badRequestError='#[error.description default "There was an issue with your request message."]' unauthorizedError='#[error.description default "You have issues accessing the system"]' notFoundError='#[error.description default "The API has not been implemented"]' notAcceptableError='#[error.description default "One of the request or parameters is unacceptable"]' timeoutError='#[error.description default "You request to the server has been timed-out"]' unsupportedMediaTypeError='#[error.description default "Media Type not supported"]' tooManyRequestsError='#[error.description default "You have made too many requests to the server"]' serverError='#[error.description default "There is a server issue"]' methodNotAllowedError='#[error.description default "The method has not been implemented"]' connectivityError='#[error.description default "You have issues accessing the system"]' errorTypes="MICO-ORDER-PROCESS-API:NOT_FOUND" errorCodes="404" errorMessages='#[error.detailedDescription default "" replace "," with ""]'/>
 				<set-variable value="#[attributes.httpStatus]" doc:name="Set httpStatus" doc:id="2707f80b-4de1-4c12-8ef0-584c78057ddd" variableName="httpStatus" />
 			</on-error-propagate>
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="079999d9-3d23-4c6f-8595-0c5547ebd317" when="#[error.errorMessage.payload.errorDetails[1].message == 'Duplicate value']" >
+				<ee:transform doc:name="Transform Message" doc:id="e16a9d97-aada-4618-a9b4-42c34c3e0e7f" >
+					<ee:message />
+					<ee:variables >
+						<ee:set-variable variableName="errorDetails" ><![CDATA[%dw 2.0
+output application/java
+---
+error.muleMessage.typedValue.errorDetails default []]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<error-handler-plugin:on-error doc:name="Process Error" doc:id="47880236-27de-48d4-a7ec-42785292b354" badRequestError='#[error.description default "There was an issue with your request message."]' unauthorizedError='#[error.description default "You have issues accessing the system"]' notFoundError='#[error.description default "The API has not been implemented"]' notAcceptableError='#[error.description default "One of the request or parameters is unacceptable"]' timeoutError='#[error.description default "You request to the server has been timed-out"]' unsupportedMediaTypeError='#[error.description default "Media Type not supported"]' tooManyRequestsError='#[error.description default "You have made too many requests to the server"]' serverError='#[error.description default "There is a server issue"]' methodNotAllowedError='#[error.description default "The method has not been implemented"]' connectivityError='#[error.description default "You have issues accessing the system"]' errorTypes="MULE:UNKNOWN" errorCodes="409" errorMessages='#[error.detailedDescription default "" replace "," with ""]' />
+				<set-variable value="#[attributes.httpStatus]" doc:name="Set httpStatus" doc:id="c5d385d6-65a1-492c-94fa-6c514b9a2ad5" variableName="httpStatus" />
+			</on-error-propagate>
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="e1bfca4a-8a88-4c9c-b91c-c53911a05182" when="#[error.errorMessage.payload.errorDetails[1].message == 'Malformed id']" >
+				<ee:transform doc:name="Transform Message" doc:id="9d1a2835-8349-40f5-beb2-0802c0eef61b" >
+					<ee:message />
+					<ee:variables >
+						<ee:set-variable variableName="errorDetails" ><![CDATA[%dw 2.0
+output application/java
+---
+error.muleMessage.typedValue.errorDetails default []]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<error-handler-plugin:on-error doc:name="Process Error" doc:id="741db676-1fef-4ca5-8aaf-a245d8b5623e" badRequestError='#[error.description default "There was an issue with your request message."]' unauthorizedError='#[error.description default "You have issues accessing the system"]' notFoundError='#[error.description default "The API has not been implemented"]' notAcceptableError='#[error.description default "One of the request or parameters is unacceptable"]' timeoutError='#[error.description default "You request to the server has been timed-out"]' unsupportedMediaTypeError='#[error.description default "Media Type not supported"]' tooManyRequestsError='#[error.description default "You have made too many requests to the server"]' serverError='#[error.description default "There is a server issue"]' methodNotAllowedError='#[error.description default "The method has not been implemented"]' connectivityError='#[error.description default "You have issues accessing the system"]' errorTypes="MULE:UNKNOWN" errorCodes="409" errorMessages='#[error.detailedDescription default "" replace "," with ""]' />
+				<set-variable value="#[attributes.httpStatus]" doc:name="Set httpStatus" doc:id="9995725a-755a-4472-a357-e7cc507cba55" variableName="httpStatus" />
+			</on-error-propagate>
 			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="45039e65-01a8-48f3-83fd-75c987525540" type="ANY">
+				<logger level="INFO" doc:name="Logger" doc:id="6e46a834-1432-4898-a629-392e2e96fd42" message="#[payload]"/>
 				<ee:transform doc:name="Transform Message" doc:id="ca0df71e-07dc-4b7a-9430-7c20f5bad9e8">
 					<ee:message />
 					<ee:variables>
