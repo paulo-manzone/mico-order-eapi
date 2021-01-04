@@ -44,7 +44,7 @@ output application/json
 error.errorMessage.payload]]></ee:set-payload>
 						</ee:message>
 						<ee:variables>
-							<ee:set-variable variableName="httpStatus"><![CDATA[error.errorMessage.attributes.statusCode as Number]]></ee:set-variable>
+							<ee:set-variable variableName="httpStatus"><![CDATA[error.errorMessage.attributes.statusCode as Number default 500]]></ee:set-variable>
 						</ee:variables>
 					</ee:transform>
 				</on-error-propagate>
@@ -52,16 +52,12 @@ error.errorMessage.payload]]></ee:set-payload>
 		</try>
 	</flow>
 	<flow
-		name="getOrderByIdFlow"
+		name="getOrderByPoNumberFlow"
 		doc:id="ca4313b8-98b4-4a1e-bfc4-308ca64b4da5">
 		<try
 			doc:name="Try"
 			doc:id="f87d23f5-1667-4d2c-9ee4-92c1005858db">
-			<mico-order-process-api:get-order-by-id
-				doc:name="Get order by Id"
-				doc:id="611805b6-9134-4cf4-b17d-d15fdeb51a49"
-				config-ref="Mico_Order_Process_API_Config"
-				salesforce-id="#[message.attributes.uriParams.salesforceId]" />
+			<mico-order-process-api:get-order-by-ponumber doc:name="Get order by poNumber" doc:id="83b14a6a-01ff-45d7-b473-579dbf6c3a60" config-ref="Mico_Order_Process_API_Config" po-number="#[attributes.uriParams.'poNumber']"/>
 			<error-handler>
 				<on-error-propagate
 					enableNotifications="true"
@@ -79,7 +75,7 @@ output application/json
 error.errorMessage.payload]]></ee:set-payload>
 						</ee:message>
 						<ee:variables>
-							<ee:set-variable variableName="httpStatus"><![CDATA[error.errorMessage.attributes.statusCode as Number]]></ee:set-variable>
+							<ee:set-variable variableName="httpStatus"><![CDATA[error.errorMessage.attributes.statusCode as Number default 500]]></ee:set-variable>
 						</ee:variables>
 					</ee:transform>
 				</on-error-propagate>
@@ -116,7 +112,7 @@ output application/json
 error.errorMessage.payload]]></ee:set-payload>
 						</ee:message>
 						<ee:variables>
-							<ee:set-variable variableName="httpStatus"><![CDATA[error.errorMessage.attributes.statusCode as Number]]></ee:set-variable>
+							<ee:set-variable variableName="httpStatus"><![CDATA[error.errorMessage.attributes.statusCode as Number default 500]]></ee:set-variable>
 						</ee:variables>
 					</ee:transform>
 				</on-error-propagate>
@@ -124,16 +120,12 @@ error.errorMessage.payload]]></ee:set-payload>
 		</try>
 	</flow>
 	<flow
-		name="getCustomerByIdFlow"
+		name="getCustomerByEmailFlow"
 		doc:id="1f731a94-356a-461f-8692-edb3f299f4ba">
 		<try
 			doc:name="Try"
 			doc:id="83ced53e-ca3d-45ac-85dc-c494c781a765">
-			<mico-order-process-api:get-customer-by-id
-				doc:name="Get customer by Id"
-				doc:id="62bd923e-7a51-425c-aef1-603f24b427ff"
-				config-ref="Mico_Order_Process_API_Config"
-				salesforce-id="#[message.attributes.uriParams.salesforceId]" />
+			<mico-order-process-api:get-customer-by-email doc:name="Get customer by email" doc:id="09457a8c-02f7-4512-ab53-ff6db52e5bda" config-ref="Mico_Order_Process_API_Config" email="#[attributes.uriParams.'email']"/>
 			<error-handler>
 				<on-error-propagate
 					enableNotifications="true"
@@ -151,7 +143,7 @@ output application/json
 error.errorMessage.payload]]></ee:set-payload>
 						</ee:message>
 						<ee:variables>
-							<ee:set-variable variableName="httpStatus"><![CDATA[error.errorMessage.attributes.statusCode as Number]]></ee:set-variable>
+							<ee:set-variable variableName="httpStatus"><![CDATA[error.errorMessage.attributes.statusCode as Number default 500]]></ee:set-variable>
 						</ee:variables>
 					</ee:transform>
 				</on-error-propagate>
@@ -186,7 +178,7 @@ output application/json
 error.errorMessage.payload]]></ee:set-payload>
 						</ee:message>
 						<ee:variables>
-							<ee:set-variable variableName="httpStatus"><![CDATA[error.errorMessage.attributes.statusCode as Number]]></ee:set-variable>
+							<ee:set-variable variableName="httpStatus"><![CDATA[error.errorMessage.attributes.statusCode as Number default 500]]></ee:set-variable>
 						</ee:variables>
 					</ee:transform>
 				</on-error-propagate>

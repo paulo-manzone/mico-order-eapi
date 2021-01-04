@@ -1,188 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mule
+	xmlns:error-handler-plugin="http://www.mulesoft.org/schema/mule/error-handler-plugin"
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
 	xmlns="http://www.mulesoft.org/schema/mule/core"
 	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
 	xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/error-handler-plugin http://www.mulesoft.org/schema/mule/error-handler-plugin/current/mule-error-handler-plugin.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<flow name="mico-order-eapi-main">
-		<http:listener
-			config-ref="mico-order-eapi-httpListenerConfig"
-			path="/api/${api.majorVersion}/*">
-			<http:response statusCode="#[vars.httpStatus default 200]">
-				<http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
-			</http:response>
-			<http:error-response statusCode="#[vars.httpStatus default 500]">
-				<http:body><![CDATA[#[payload]]]></http:body>
-				<http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
-			</http:error-response>
-		</http:listener>
-		<apikit:router config-ref="mico-order-eapi-config" />
-		<error-handler>
-			<on-error-propagate
-				type="APIKIT:BAD_REQUEST"
-				enableNotifications="true"
-				logException="true">
-				<ee:transform
-					xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-					xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
-output application/json
+        <http:listener config-ref="mico-order-eapi-httpListenerConfig" path="/api/${api.majorVersion}/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="mico-order-eapi-config"/>
+        <error-handler>
+            <on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="5e5bb725-67bd-4d57-a3c4-fba3ac4c7482" type="MICO-ORDER-PROCESS-API:NOT_FOUND" when="#[error.errorType.namespace == 'MICO-ORDER-PROCESS-API']">
+				<ee:transform doc:name="Transform Message" doc:id="6a534c83-68f7-4e6e-87b4-13942c2f46d2" >
+					<ee:message />
+					<ee:variables >
+						<ee:set-variable variableName="errorDetails" ><![CDATA[%dw 2.0
+output application/java
 ---
-{
-	errorMessage: "Bad request",
-	description: error.description
-}]]></ee:set-payload>
-					</ee:message>
-					<ee:variables>
-						<ee:set-variable variableName="httpStatus"><![CDATA[400]]></ee:set-variable>
+error.muleMessage.typedValue.errorDetails default []]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
+				<error-handler-plugin:on-error doc:name="Process Error" doc:id="add3cc22-177c-4b07-b945-59bd8d57f186" badRequestError='#[error.description default "There was an issue with your request message."]' unauthorizedError='#[error.description default "You have issues accessing the system"]' notFoundError='#[error.description default "The API has not been implemented"]' notAcceptableError='#[error.description default "One of the request or parameters is unacceptable"]' timeoutError='#[error.description default "You request to the server has been timed-out"]' unsupportedMediaTypeError='#[error.description default "Media Type not supported"]' tooManyRequestsError='#[error.description default "You have made too many requests to the server"]' serverError='#[error.description default "There is a server issue"]' methodNotAllowedError='#[error.description default "The method has not been implemented"]' connectivityError='#[error.description default "You have issues accessing the system"]' errorTypes="MICO-ORDER-PROCESS-API:NOT_FOUND" errorCodes="404" errorMessages='#[error.detailedDescription default "" replace "," with ""]'/>
+				<set-variable value="#[attributes.httpStatus]" doc:name="Set httpStatus" doc:id="2707f80b-4de1-4c12-8ef0-584c78057ddd" variableName="httpStatus" />
 			</on-error-propagate>
-			<on-error-propagate type="APIKIT:NOT_FOUND">
-				<ee:transform
-					xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-					xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-	errorMessage: "Resource not found",
-	description: error.description
-}]]></ee:set-payload>
-					</ee:message>
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="45039e65-01a8-48f3-83fd-75c987525540" type="ANY">
+				<ee:transform doc:name="Transform Message" doc:id="ca0df71e-07dc-4b7a-9430-7c20f5bad9e8">
+					<ee:message />
 					<ee:variables>
-						<ee:set-variable variableName="httpStatus"><![CDATA[404]]></ee:set-variable>
+						<ee:set-variable variableName="errorDetails"><![CDATA[%dw 2.0
+output application/java
+---
+error.muleMessage.typedValue.errorDetails default []]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
+				<error-handler-plugin:on-error doc:id="c03ab769-efe8-47dd-b295-8d8391399776" badRequestError='#[error.description default "There was an issue with your request message."]' unauthorizedError='#[error.description default "You have issues accessing the system"]' notFoundError='#[error.description default "The API has not been implemented"]' notAcceptableError='#[error.description default "One of the request or parameters is unacceptable"]' timeoutError='#[error.description default "You request to the server has been timed-out"]' unsupportedMediaTypeError='#[error.description default "Media Type not supported"]' tooManyRequestsError='#[error.description default "You have made too many requests to the server"]' serverError='#[error.description default "There is a server issue"]' methodNotAllowedError='#[error.description default "The method has not been implemented"]' connectivityError='#[error.description default "You have issues accessing the system"]' doc:name="Process Error" />
+				<set-variable value="#[attributes.httpStatus]" doc:name="Set httpStatus" doc:id="8adfb0ac-af74-49bd-9152-56974475a4d8" variableName="httpStatus" />
 			</on-error-propagate>
-			<on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
-				<ee:transform
-					xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-					xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-	errorMessage: "Method not allowed",
-	description: error.description
-}]]></ee:set-payload>
-					</ee:message>
-					<ee:variables>
-						<ee:set-variable variableName="httpStatus"><![CDATA[405]]></ee:set-variable>
-					</ee:variables>
-				</ee:transform>
-			</on-error-propagate>
-			<on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
-				<ee:transform
-					xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-					xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-	errorMessage: "Not acceptable",
-	description: error.description
-}]]></ee:set-payload>
-					</ee:message>
-					<ee:variables>
-						<ee:set-variable variableName="httpStatus"><![CDATA[406]]></ee:set-variable>
-					</ee:variables>
-				</ee:transform>
-			</on-error-propagate>
-			<on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
-				<ee:transform
-					xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-					xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-	errorMessage: "Unsupported media type",
-	description: error.description
-}]]></ee:set-payload>
-					</ee:message>
-					<ee:variables>
-						<ee:set-variable variableName="httpStatus"><![CDATA[415]]></ee:set-variable>
-					</ee:variables>
-				</ee:transform>
-			</on-error-propagate>
-			<on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
-				<ee:transform
-					xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-					xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-	errorMessage: "Not Implemented",
-	description: error.description
-}]]></ee:set-payload>
-					</ee:message>
-					<ee:variables>
-						<ee:set-variable variableName="httpStatus"><![CDATA[501]]></ee:set-variable>
-					</ee:variables>
-				</ee:transform>
-			</on-error-propagate>
-		</error-handler>
-	</flow>
-	<flow name="mico-order-eapi-console">
-		<http:listener
-			config-ref="mico-order-eapi-httpListenerConfig"
-			path="/console/${api.majorVersion}/*">
-			<http:response statusCode="#[vars.httpStatus default 200]">
-				<http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
-			</http:response>
-			<http:error-response statusCode="#[vars.httpStatus default 500]">
-				<http:body><![CDATA[#[payload]]]></http:body>
-				<http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
-			</http:error-response>
-		</http:listener>
-		<apikit:console config-ref="mico-order-eapi-config" />
-		<error-handler>
-			<on-error-propagate type="APIKIT:NOT_FOUND">
-				<ee:transform
-					xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-					xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
+        </error-handler>
+    </flow>
+    <flow name="mico-order-eapi-console">
+        <http:listener config-ref="mico-order-eapi-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="mico-order-eapi-config"/>
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {message: "Resource not found"}]]></ee:set-payload>
-					</ee:message>
-					<ee:variables>
-						<ee:set-variable variableName="httpStatus">404</ee:set-variable>
-					</ee:variables>
-				</ee:transform>
-			</on-error-propagate>
-		</error-handler>
-	</flow>
-	<flow name="get:\alive:mico-order-eapi-config">
-		<flow-ref doc:name="getAlive" doc:id="664a87e2-4d98-496e-9bec-1b32b2875b14" name="getAlive" />
-	</flow>
-	<flow name="get:\customers:mico-order-eapi-config">
-		<flow-ref doc:name="getCustomer" doc:id="dd71ab15-2b76-4d3f-83ef-85b15fb18a6d" name="getCustomer" />
-	</flow>
-	<flow name="get:\orders:mico-order-eapi-config">
-		<flow-ref doc:name="getOrders" doc:id="76f90f46-0511-43d5-ad20-460083f942a8" name="getOrders" />
-	</flow>
-	<flow name="get:\ready:mico-order-eapi-config">
-		<flow-ref doc:name="getReady" doc:id="e3a749fd-9e12-4ce4-9fdf-b7b025ff0861" name="getReady" />
-	</flow>
-	<flow name="get:\customers\(salesforceId):mico-order-eapi-config">
-		<flow-ref doc:name="getCustomerByIdFlow" doc:id="52de9649-3e3a-4ca1-95c5-6418b913e738" name="getCustomerByIdFlow"/>
-	</flow>
-	<flow name="get:\orders\(salesforceId):mico-order-eapi-config">
-		<flow-ref doc:name="getOrderByIdFlow" doc:id="b23199c0-2750-4f09-8034-b2704a34a9cf" name="getOrderByIdFlow"/>
-	</flow>
-	<flow name="post:\orders:application\json:mico-order-eapi-config">
-		<flow-ref doc:name="postOrders" doc:id="ef4912b1-a14d-4c82-aec1-dfeb5a10f54d" name="postOrders" />
-	</flow>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="get:\alive:mico-order-eapi-config">
+		<flow-ref doc:name="Flow Reference" doc:id="53b4364a-866a-4bad-9890-92d2c6e7f1d0" name="getAlive"/>
+    </flow>
+    <flow name="get:\customers:mico-order-eapi-config">
+		<flow-ref doc:name="Flow Reference" doc:id="921191d4-837b-47d3-9215-fc6c81d5b49b" name="getCustomer"/>
+    </flow>
+    <flow name="get:\orders:mico-order-eapi-config">
+		<flow-ref doc:name="Flow Reference" doc:id="6e085bed-8890-44ea-a8cc-197e25685909" name="getOrders"/>
+    </flow>
+    <flow name="get:\ready:mico-order-eapi-config">
+		<flow-ref doc:name="Flow Reference" doc:id="54ac1e32-2522-497b-a995-b12b591cb435" name="getReady"/>
+    </flow>
+    <flow name="get:\customers\(email):mico-order-eapi-config">
+		<flow-ref doc:name="Flow Reference" doc:id="2bddc9ba-249f-4afe-aaf6-3648b4fa9d2a" name="getCustomerByEmailFlow"/>
+    </flow>
+    <flow name="get:\orders\(poNumber):mico-order-eapi-config">
+		<flow-ref doc:name="Flow Reference" doc:id="0a30b370-bb41-4d6b-8992-6f7cffe8a3d3" name="getOrderByPoNumberFlow"/>
+    </flow>
+    <flow name="post:\orders:application\json:mico-order-eapi-config">
+		<flow-ref doc:name="Flow Reference" doc:id="6b4014d2-5dfa-4d86-b4e6-6b0291a7e8ab" name="postOrders"/>
+    </flow>
 </mule>
