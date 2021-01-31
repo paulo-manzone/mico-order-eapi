@@ -1,6 +1,12 @@
 pipeline {
     agent any
-
+    options {
+    	ansiColor('xterm')  
+  	}
+    environment {
+    	AP_CLIENT_ID = credentials('ap.client_id')
+    	AP_CLIENT_SECRET = credentials('ap.client_secret')
+    }
     stages {
         stage('Build') {
         	steps {
@@ -9,8 +15,7 @@ pipeline {
         }
         stage('Deploy to CloudHub') {
         	steps {
-                bat 'mvn package deploy -DmuleDeploy -Dap.client_id=4563c4fe43a84132b283442580d88a7b -Dap.client_secret=F7074D23B5F14571BB5F483F90058b5c'
-            }
+                bat 'mvn mule:deploy -DmuleDeploy -Dmule.artifact=./target/mico-order-eapi-1.0.11-mule-application.jar -Dap.client_id=${AP_CLIENT_ID} -Dap.client_secret=${AP_CLIENT_SECRET}'
+            }	
         }
    	}
-}    

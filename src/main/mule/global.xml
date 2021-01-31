@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <mule
+	xmlns:error-handler-plugin="http://www.mulesoft.org/schema/mule/error-handler-plugin"
 	xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
 	xmlns:mico-order-process-api="http://www.mulesoft.org/schema/mule/mico-order-process-api"
 	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
 	xmlns:http="http://www.mulesoft.org/schema/mule/http"
 	xmlns="http://www.mulesoft.org/schema/mule/core"
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
 	http://www.mulesoft.org/schema/mule/mule-apikit
@@ -19,7 +19,8 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 	http://www.mulesoft.org/schema/mule/mico-order-process-api 
 	http://www.mulesoft.org/schema/mule/mico-order-process-api/current/mule-mico-order-process-api.xsd
-http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
+http://www.mulesoft.org/schema/mule/error-handler-plugin http://www.mulesoft.org/schema/mule/error-handler-plugin/current/mule-error-handler-plugin.xsd">
 
 	<http:listener-config name="mico-order-eapi-httpListenerConfig">
 		<http:listener-connection
@@ -37,7 +38,7 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 		name="Mico_Order_Process_API_Config"
 		doc:name="Mico Order Process API Config"
 		doc:id="2e5e35bb-ec64-4211-82f6-cfac4f2b1640"
-		property_host="mico-order-papi-dev.us-e2.cloudhub.io "
+		property_host="mico-order-papi-dev.us-e2.cloudhub.io"
 		property_port="80"
 		property_protocol="HTTP"
 		property_client-id="teste"
@@ -66,5 +67,6 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 		doc:name="apiAutodiscovery"
 		doc:id="8020e19d-5b21-45cb-848e-d255b3a7b49e"
 		flowRef="mico-order-eapi-main" />
+	<error-handler-plugin:config name="Error_Handler_Plugin_Config" doc:name="Error Handler Plugin Config" doc:id="405ef91f-f707-453a-b320-cccbf6039982" apiName="#[Mule::p('api.artifactId')]" />
 
 </mule>
